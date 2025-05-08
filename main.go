@@ -120,3 +120,16 @@ func (r DynaRect) WithSpacing(spacing float32) DynaRect {
 		ChildCount: r.ChildCount,
 	}
 }
+
+// WithScrollOffset - method allow us to generate Rectangle position for scrollable content
+func (r DynaRect) WithScrollOffset(offset rl.Vector2) DynaRect {
+	return DynaRect{
+		X:          r.X + offset.X,
+		Y:          r.Y + offset.Y,
+		Width:      r.Width,
+		Height:     r.Height,
+		Padding:    r.Padding,
+		Spacing:    r.Spacing,
+		ChildCount: r.ChildCount,
+	}
+}
