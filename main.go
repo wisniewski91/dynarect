@@ -16,6 +16,14 @@ type DynaRect struct {
 	ChildCount float32 // Used to calculate width of child rects generated from parent rect
 }
 
+// DynaRectIterator - struct that allow you to generate child rects inside parent rect that align childs next to
+// eachother counting available width, and moving to the next row if not enought space is left
+type DynaRectIterator struct {
+	ParentRect  DynaRect
+	ChildSize   rl.Vector2
+	ActualChild int
+}
+
 // GetRect - Method to retrieve raylib.Rectangle from DynaRect
 func (r DynaRect) GetRect() rl.Rectangle {
 	return rl.NewRectangle(r.X, r.Y, r.Width, r.Height)
@@ -131,5 +139,41 @@ func (r DynaRect) WithScrollOffset(offset rl.Vector2) DynaRect {
 		Padding:    r.Padding,
 		Spacing:    r.Spacing,
 		ChildCount: r.ChildCount,
+	}
+}
+
+// NextChild - increase child count of DynaRectIterator instance by one
+//
+// It is used to calculate actual position of child element inside parent rect
+func (dri *DynaRectIterator) NextChild() {
+	dri.ActualChild++
+}
+
+// ChildRect - return raylib.Rectangle for actual child element of an DynaRectIterator instance
+func (dri *DynaRectIterator) ChildRect() rl.Rectangle {
+	childsInRow := int(dri.ParentRect.Width / dri.ChildSize.X)
+	childPosition := dri.ActualChild % childsInRow
+	childRow := dri.ActualChild / childsInRow
+	return rl.Rectangle{
+		X:      dri.ParentRect.X + float32(childPosition)*dri.ChildSize.X,
+		Y:      dri.ParentRect.Y + float32(childRow)*dri.ChildSize.Y,
+		Width:  dri.ChildSize.X,
+		Height: dri.ChildSize.Y,
+	}
+}
+
+// ChildDynaRect - returns DynaRect for actual child of element of an DynaRectIterator instance
+func (dri *DynaRectIterator) ChildDynaRect() DynaRect {
+	childsInRow := int(dri.ParentRect.Width / dri.ChildSize.X)
+	childPosition := dri.ActualChild % childsInRow
+	childRow := dri.ActualChild / childsInRow
+	return DynaRect{
+		X:          dri.ParentRect.X + float32(childPosition)*dri.ChildSize.X,
+		Y:          dri.ParentRect.Y + float32(childRow)*dri.ChildSize.Y,
+		Width:      dri.ChildSize.X,
+		Height:     dri.ChildSize.Y,
+		Padding:    dri.ParentRect.Padding,
+		Spacing:    dri.ParentRect.Spacing,
+		ChildCount: dri.ParentRect.ChildCount,
 	}
 }
