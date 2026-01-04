@@ -72,6 +72,13 @@ func (r DynaRect) NexRow() DynaRect {
 	}
 }
 
+// Next - Update actual DynaRect using actual Y position and Height of this element.
+//
+// Y: Y + Spacing + Height
+func (r *DynaRect) Next() {
+	r.Y += r.Spacing + r.Height
+}
+
 // WithHeight - returns new DynaRect with new Height value
 func (r DynaRect) WithHeight(height float32) DynaRect {
 	return DynaRect{
@@ -125,6 +132,58 @@ func (r DynaRect) WithSpacing(spacing float32) DynaRect {
 		Height:     r.Height,
 		Padding:    r.Padding,
 		Spacing:    spacing,
+		ChildCount: r.ChildCount,
+	}
+}
+
+// WithOffset - returns new DynaRect with updated offset
+func (r DynaRect) WithOffset(x, y float32) DynaRect {
+	return DynaRect{
+		X:          r.X + x,
+		Y:          r.Y + y,
+		Width:      r.Width,
+		Height:     r.Height,
+		Padding:    r.Padding,
+		Spacing:    r.Spacing,
+		ChildCount: r.ChildCount,
+	}
+}
+
+// WithWidth - returns new DynaRect with updated width
+func (r DynaRect) WithWidth(width float32) DynaRect {
+	return DynaRect{
+		X:          r.X,
+		Y:          r.Y,
+		Width:      width,
+		Height:     r.Height,
+		Padding:    r.Padding,
+		Spacing:    r.Spacing,
+		ChildCount: r.ChildCount,
+	}
+}
+
+// WithSize - returns new DynaRect with updated size
+func (r DynaRect) WithSize(width, height float32) DynaRect {
+	return DynaRect{
+		X:          r.X,
+		Y:          r.Y,
+		Width:      width,
+		Height:     height,
+		Padding:    r.Padding,
+		Spacing:    r.Spacing,
+		ChildCount: r.ChildCount,
+	}
+}
+
+// WithSizeOffset - returns new DynaRect with updated size
+func (r DynaRect) WithSizeOffset(width, height float32) DynaRect {
+	return DynaRect{
+		X:          r.X,
+		Y:          r.Y,
+		Width:      r.Width + width,
+		Height:     r.Height + height,
+		Padding:    r.Padding,
+		Spacing:    r.Spacing,
 		ChildCount: r.ChildCount,
 	}
 }
