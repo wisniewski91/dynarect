@@ -136,20 +136,20 @@ func (r DynaRect) WithSpacing(spacing float32) DynaRect {
 	}
 }
 
-// WithOffset - returns new DynaRect with updated offset
+// WithOffset - returns new DynaRect with updated offset. It updates width and height based on offset values, to make result DynaRect inside base container.
 func (r DynaRect) WithOffset(x, y float32) DynaRect {
 	return DynaRect{
 		X:          r.X + x,
 		Y:          r.Y + y,
-		Width:      r.Width,
-		Height:     r.Height,
+		Width:      r.Width - x,
+		Height:     r.Height - y,
 		Padding:    r.Padding,
 		Spacing:    r.Spacing,
 		ChildCount: r.ChildCount,
 	}
 }
 
-// WithWidth - returns new DynaRect with updated width
+// WithWidth - returns new DynaRect with provided width
 func (r DynaRect) WithWidth(width float32) DynaRect {
 	return DynaRect{
 		X:          r.X,
@@ -175,7 +175,7 @@ func (r DynaRect) WithSize(width, height float32) DynaRect {
 	}
 }
 
-// WithSizeOffset - returns new DynaRect with updated size
+// WithSizeOffset - returns new DynaRect with updated size. Offset add values to the actual DynaRect size.
 func (r DynaRect) WithSizeOffset(width, height float32) DynaRect {
 	return DynaRect{
 		X:          r.X,
@@ -203,7 +203,7 @@ func (r DynaRect) WithScrollOffset(offset rl.Vector2) DynaRect {
 
 // NextChild - increase child count of DynaRectIterator instance by one
 //
-// It is used to calculate actual position of child element inside parent rect
+// ActualChild is used to calculate actual position of specific child element inside parent rect
 func (dri *DynaRectIterator) NextChild() {
 	dri.ActualChild++
 }
